@@ -1,4 +1,4 @@
-package me.ele.bpm.talos.common.util;
+package z.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
