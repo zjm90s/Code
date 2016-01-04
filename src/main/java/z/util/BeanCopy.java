@@ -13,7 +13,7 @@ import java.util.Set;
 /**
  * Copy By Reflect
  * @author jianming.zhou
- * @since 2015-12-29
+ * @since 2016-01-04
  *
  */
 public class BeanCopy {
@@ -60,13 +60,18 @@ public class BeanCopy {
                 }else if(fieldType.isEnum()){  //Enum类型
                     sourceMap.put(fieldName, sourceSelfDefEnum((Enum<?>) value));
                 }else if("List".equals(fieldTypeName)){  //List类型
-                    List<Object> list = new ArrayList<Object>();
+                	//获取List<T>中T的类型
+                	ParameterizedType  pt = (ParameterizedType) method.getGenericParameterTypes()[0];
+                	Class<?> keyType = (Class<?>) pt.getActualTypeArguments()[0];
+                	
                     List<Object> valueList = (List<Object>) value;
-
-                    for(Object obj : valueList){
-                    	if (isBasicType(obj.getClass().getSimpleName())) {
+                    List<Object> list = new ArrayList<Object>();
+                    if (isBasicType(keyType.getSimpleName())) {
+                    	for (Object obj : valueList) {
                     		list.add(obj);
-                    	} else {
+                    	}
+                    } else {
+                    	for (Object obj : valueList) {
                     		//把List<T>中T类型数据用Map封装
                     		Map<String, Object> map = new HashMap<String, Object>();
                     		setValueToMap(map,obj);
@@ -99,7 +104,9 @@ public class BeanCopy {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+            	if (!(e instanceof NoSuchMethodException)) {
+            		e.printStackTrace();
+            	}
             }
         }
 
@@ -124,9 +131,8 @@ public class BeanCopy {
                 String fieldTypeName = fieldType.getSimpleName();
                 String fieldName = field.getName();
 
-                Object value = null;
                 if(isBasicType(fieldTypeName)){  //java基础数据类型
-                    value = basicType(fieldTypeName,sourceMap.get(fieldName));
+                	Object value = basicType(fieldTypeName,sourceMap.get(fieldName));
                     Method method = clazz.getMethod(getSetMethodName(field), fieldType);
                     method.invoke(targetBean, value);
                 }else if(fieldType.isEnum()){      //Enum类型
@@ -136,18 +142,19 @@ public class BeanCopy {
                     List<Object> sourceList = (List<Object>) sourceMap.get(fieldName);
 
                     if (null != sourceList) {
+                    	//获取List<T>中T的类型
                     	Method method = clazz.getMethod(getSetMethodName(field), fieldType);
+                    	ParameterizedType  pt = (ParameterizedType) method.getGenericParameterTypes()[0];
+                    	Class<?> keyType = (Class<?>) pt.getActualTypeArguments()[0];
+                    	
                     	List<Object> targetList = new ArrayList<Object>();
-                    	for(Object object : sourceList){
-                    		if (isBasicType(object.getClass().getSimpleName())) {
+                    	if (isBasicType(keyType.getSimpleName())) {
+                    		for (Object object : sourceList) {
                     			targetList.add(object);
-                    		} else {
-                    			//获取List<T>中T的类型
-                    			Method _method = clazz.getMethod(getSetMethodName(field), fieldType);
-                    			ParameterizedType  pt = (ParameterizedType) _method.getGenericParameterTypes()[0];
-                    			Class<?> type = (Class<?>) pt.getActualTypeArguments()[0];
-
-                    			Object obj = type.newInstance();
+                    		}
+                    	} else {
+                      		for (Object object : sourceList) {
+                    			Object obj = keyType.newInstance();
                     			setValues(obj, (Map<String, Object>)object);
                     			targetList.add(obj);
                     		}
@@ -156,14 +163,13 @@ public class BeanCopy {
                     }
                 }else if("Map".equals(fieldTypeName)){  //Map类型
                     Map<Object, Object> valueMap = (Map<Object, Object>) sourceMap.get(fieldName);
-
+                    
                     if (null != valueMap) {
                     	//获取Map<K,V>中K,V的类型
                     	Method method = clazz.getMethod(getSetMethodName(field), fieldType);
                     	ParameterizedType  pt = (ParameterizedType) method.getGenericParameterTypes()[0];
-                    	Class<?> keyType = (Class<?>) pt.getActualTypeArguments()[0];
                     	Class<?> valueType = (Class<?>) pt.getActualTypeArguments()[1];
-
+                    	
                     	Set<Object> keys = valueMap.keySet();
                     	Iterator<Object> it = keys.iterator();
                     	Map<Object, Object> targetMap = new HashMap<Object, Object>();
@@ -240,51 +246,55 @@ public class BeanCopy {
             case "int" : return true;
             case "Long" : return true;
             case "long" : return true;
+            case "Short" : return true;
+            case "short" : return true;
             case "Double" : return true;
             case "double" : return true;
             case "Float" : return true;
             case "float" : return true;
             case "Byte" : return true;
             case "byte" : return true;
-            case "Short" : return true;
-            case "short" : return true;
             case "Character" : return true;
             case "char" : return true;
             case "Date" : return true;
-            case "DateTime" : return true;
             case "Timestamp" : return true;
+            case "DateTime" : return true;
             default : return false;
         }
     }
 
     /**
      * 如果是java基础数据类型，则返回相应类型值
+     * <p>有时map中的属性类型会丢失，所以此处部分类型作了强制转换
      * @param type
      * @param obj
      * @return
      */
     private static Object basicType(String type, Object obj){
+    	if (null == obj) {
+    		return null;
+    	}
         switch(type){
             case "String" : return obj;
             case "Boolean" : return obj;
             case "boolean" : return obj;
-            case "Integer" : return obj;
-            case "int" : return obj;
-            case "Long" : return obj;
-            case "long" : return obj;
-            case "Double" : return obj;
-            case "double" : return obj;
-            case "Float" : return obj;
-            case "float" : return obj;
-            case "Byte" : return obj;
-            case "byte" : return obj;
-            case "Short" : return Integer.valueOf(obj + "");
-            case "short" : return Integer.valueOf(obj + "");
-            case "Character" : return String.valueOf(obj);
-            case "char" : return String.valueOf(obj);
-            case "Date" : return String.valueOf(obj);
-            case "DateTime" : return String.valueOf(obj);
+            case "Integer" : return Integer.valueOf(obj + "");
+            case "int" : return Integer.parseInt(obj + "");
+            case "Long" : return Long.valueOf(obj + "");
+            case "long" : return Long.parseLong(obj + "");
+            case "Short" : return Short.valueOf(obj + "");
+            case "short" : return Short.parseShort(obj + "");
+            case "Double" : return Double.valueOf(obj + "");
+            case "double" : return Double.parseDouble(obj + "");
+            case "Float" : return Float.valueOf(obj + "");
+            case "float" : return Float.parseFloat(obj + "");
+            case "Byte" : return Byte.valueOf(obj + "");
+            case "byte" : return Byte.parseByte(obj + "");
+            case "Character" : return obj;
+            case "char" : return obj;
+            case "Date" : return obj;
             case "Timestamp" : return obj;
+            case "DateTime" : return obj;
             default : return null;
         }
     }
