@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import z.util.BeanCopy;
-
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -21,6 +19,7 @@ public class BeanCopyTest {
 		
 		System.out.println(a);
 	}
+	
 	@Test
 	public void testSetValues() {
 		A a = new A();
