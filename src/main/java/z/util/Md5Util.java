@@ -3,6 +3,11 @@ package z.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * MD5工具类
+ * @author jianming.zhou
+ *
+ */
 public class Md5Util {
 
 	public static String MD5(String source) {

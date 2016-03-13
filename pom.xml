@@ -4,7 +4,7 @@
 
   <groupId>z-code</groupId>
   <artifactId>z-code</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>z-code</name>
@@ -12,19 +12,31 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java-version>1.8</java-version>
+	<spring-framework-version>4.0.2.RELEASE</spring-framework-version>
   </properties>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
+  	<!-- Spring -->
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-beans</artifactId>
+		<version>${spring-framework-version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring-framework-version}</version>
+	</dependency>
+	
 	<dependency>
 		<groupId>joda-time</groupId>
 		<artifactId>joda-time</artifactId>
 		<version>2.7</version>
+	</dependency>
+	<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.4.4</version>
 	</dependency>
   </dependencies>
   
