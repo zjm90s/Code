@@ -5,40 +5,20 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import z.model.Pair;
 
 /**
  * 工具类
  * <p>可利用lambda表达式至最简
+ * <br>另见Collection#stream().
+ * 
  * @author jianming.zhou
  *
  */
 public class Utils {
 
-	/**
-	 * 数据过滤
-	 * 
-	 * @param list
-	 * @param filter
-	 * @return
-	 */
-	public static <T> List<T> filter(List<T> list, IFilter<T> filter) {
-		List<T> result = new ArrayList<T>();
-		if (list != null && !list.isEmpty()) {
-			for (T t : list) {
-				if (filter.filter(t)) {
-					result.add(t);
-				}
-			}
-		}
-		return result;
-	}
-	
-	public interface IFilter<T> {
-		public boolean filter(T e);
-	}
-	
 	/**
 	 * 数据转换
 	 * 
@@ -61,6 +41,29 @@ public class Utils {
 	}
 	
 	/**
+	 * 数据过滤
+	 * 
+	 * @param list
+	 * @param filter
+	 * @return
+	 */
+	public static <T> List<T> filter(Collection<T> list, IFilter<T> filter) {
+		List<T> result = new ArrayList<T>();
+		if (list != null && !list.isEmpty()) {
+			for (T t : list) {
+				if (filter.filter(t)) {
+					result.add(t);
+				}
+			}
+		}
+		return result;
+	}
+	
+	public interface IFilter<T> {
+		public boolean filter(T e);
+	}
+	
+	/**
 	 * 对集合中数据根据"主键"去重
 	 * 
 	 * @param list
@@ -78,8 +81,8 @@ public class Utils {
 				map.put(pair.first, pair.second);
 			}
 		}
-		for (K key : map.keySet()) {
-			result.add(map.get(key));
+		for (Entry<K, T> entry : map.entrySet()) {
+			result.add(entry.getValue());
 		}
 		return result;
 	}
