@@ -17,23 +17,12 @@ public class PropertiesUtil {
 	private final static String CODE = "utf-8";
 	
 	/**
-	 *读取文件数据到Properties中
-	 * <p>例如[file:/xxx.properties]
-	 * @param file
+	 * 文件读取
+	 * <p>支持绝对和相对路径
+	 * @param file 文件名
 	 * @return
 	 */
 	public static Properties read(String file) {
-		Properties prop = new Properties();
-		InputStream in = Object.class.getResourceAsStream(file);
-		try {
-			prop.load(new InputStreamReader(in, CODE));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return prop;
-	}
-	
-	public static Properties readII(String file) {
 		Properties props = new Properties();
         try {
 			props.load(new BufferedReader(new InputStreamReader(new FileInputStream(file), CODE)));
@@ -42,5 +31,22 @@ public class PropertiesUtil {
 		}
         return props;
 	}
-
+	
+	/**
+	 * 资源文件读取
+	 * <p>用于读取resources下文件
+	 * @param file 文件名
+	 * @return
+	 */
+	public static Properties read4Res(String file) {
+		Properties prop = new Properties();
+		InputStream in = Object.class.getResourceAsStream("/" + file);
+		try {
+			prop.load(new InputStreamReader(in, CODE));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return prop;
+	}
+	
 }
