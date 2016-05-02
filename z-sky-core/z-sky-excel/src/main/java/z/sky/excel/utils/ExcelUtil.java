@@ -1,7 +1,9 @@
 package z.sky.excel.utils;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.openxml4j.util.ZipSecureFile;
@@ -133,6 +135,7 @@ public class ExcelUtil {
 	 * @throws IllegalArgumentException 
 	 */
 	private static <T> void makeSheetData(Workbook wb, Sheet sheet, List<T> list) throws IllegalArgumentException, IllegalAccessException {
+		Map<String, CellStyle> cellStyleMap = getCellStyleMap(wb);
 		for (int rIndex = 0; rIndex < list.size(); rIndex++) {
 			Row row = sheet.createRow(1 + rIndex);
 			Object rowData = list.get(rIndex);
@@ -148,7 +151,7 @@ public class ExcelUtil {
 	        	Object value = field.get(rowData);
 	        	if (value != null) {
 	        		Cell cell = row.createCell(cIndex);
-	        		setCellValue(wb, cell, value, field.getType(), eCell);
+	        		setCellValue(cell, value, field.getType(), eCell, cellStyleMap);
 	        	}
 				cIndex++;
 	        }
@@ -157,12 +160,29 @@ public class ExcelUtil {
 	}
 	
 	/**
+	 * 预设单元格样式
+	 * 
+	 * <p> NUMBER : 数字正常显示，非科学计数法
+	 * 
+	 * @param wb
+	 * @return
+	 */
+	private static Map<String, CellStyle> getCellStyleMap(Workbook wb) {
+		Map<String, CellStyle> cellStyleMap = new HashMap<String, CellStyle>();
+		// NUMBER
+		CellStyle cellStyle4Num = wb.createCellStyle();
+		cellStyle4Num.setDataFormat(HSSFDataFormat.getBuiltinFormat("0"));
+		cellStyleMap.put("NUMBER", cellStyle4Num);
+		return cellStyleMap;
+	}
+	
+	/**
 	 * 设置单元格值
 	 * @param cell
 	 * @param value
 	 * @param fieldType
 	 */
-	private static void setCellValue(Workbook wb, Cell cell, Object value, Class<?> fieldType, ECell eCell) {
+	private static void setCellValue(Cell cell, Object value, Class<?> fieldType, ECell eCell, Map<String, CellStyle> cellStyleMap) {
 		String fieldTypeName = fieldType.getSimpleName();
 		switch(fieldTypeName) {
 			case "String" : cell.setCellValue((String)value); break;
@@ -170,9 +190,7 @@ public class ExcelUtil {
 			case "Integer" : cell.setCellValue((Integer)value); break;
 			case "long" :
 			case "Long" : 
-				CellStyle cellStyle = wb.createCellStyle();
-				cellStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("0"));
-				cell.setCellStyle(cellStyle);
+				cell.setCellStyle(cellStyleMap.get("NUMBER"));
 				cell.setCellValue((Long) value);
 				break;
 			case "double" :
