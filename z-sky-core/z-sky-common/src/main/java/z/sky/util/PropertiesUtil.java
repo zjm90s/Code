@@ -39,14 +39,14 @@ public class PropertiesUtil {
 	 * @return
 	 */
 	public static Properties read4Res(String file) {
-		Properties prop = new Properties();
+		Properties props = new Properties();
 		InputStream in = Object.class.getResourceAsStream("/" + file);
 		try {
-			prop.load(new InputStreamReader(in, CODE));
+			props.load(new InputStreamReader(in, CODE));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return prop;
+		return props;
 	}
 	
 }

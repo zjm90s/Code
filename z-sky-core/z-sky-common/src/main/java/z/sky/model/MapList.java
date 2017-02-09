@@ -36,6 +36,10 @@ public class MapList<K, V> {
 		}
 	}
 	
+	public boolean containsKey(K k) {
+		return map.containsKey(k);
+	}
+	
 	public List<V> get(K k) {
 		return map.get(k);
 	}
@@ -68,6 +72,10 @@ public class MapList<K, V> {
 			size += entry.getValue().size();
 		}
 		return size;
+	}
+	
+	public List<V> remove(K k) {
+		return map.remove(k);
 	}
 	
 	public void clear() {

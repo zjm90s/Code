@@ -39,7 +39,7 @@ public class LambdaTest {
 				.collect(Collectors.toList());
 		
 		// to Map
-		Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+		Map<Integer, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user, (user1, user2) -> user1));
 		
 		System.out.println();
 	}
