@@ -15,7 +15,7 @@
 		<dependency>
 		  <groupId>z.sky</groupId>
 		  <artifactId>z-sky-push-base</artifactId>
-		  <version>${z-sky.version}</version>
+		  <version>${project.version}</version>
 		</dependency>
 		<!-- websocket -->
 		<dependency>
