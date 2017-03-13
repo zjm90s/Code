@@ -1,0 +1,11 @@
+# java
+.class
+
+# eclipse
+/target/
+.classpath
+.project
+.settings/
+
+# os
+.DS_Store
