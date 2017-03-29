@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>z.sky</groupId>
-		<artifactId>z-sky-core</artifactId>
+		<artifactId>z-sky</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>z-sky-excel</artifactId>
 	<name>z-sky-excel</name>
 	<packaging>jar</packaging>
-	
+
 	<dependencies>
 		<dependency>
 		  <groupId>org.apache.poi</groupId>
