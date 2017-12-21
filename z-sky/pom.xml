@@ -18,6 +18,7 @@
 
 	<modules>
 		<module>z-sky-common</module>
+		<module>z-sky-dao</module>
 		<module>z-sky-excel</module>
 		<module>z-sky-push</module>
 		<module>z-sky-push-client</module>

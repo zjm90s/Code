@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="context" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <plugin type="z.sky.mybatis.MybatisPagePlugin"></plugin>
+        <commentGenerator>
+            <property name="suppressDate" value="true" />
+            <property name="suppressAllComments" value="false" />
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://127.0.0.1:3306/dqc?characterEncoding=UTF-8"
+                        userId="zhou" password="zhou" />
+
+		<javaModelGenerator targetPackage="z.sky.dao.po"
+				targetProject="src/main/java" />
+		<sqlMapGenerator targetPackage="mybatis.mapper"
+				targetProject="src/main/resources" />
+		<javaClientGenerator targetPackage="z.sky.dao.mapper"
+				targetProject="src/main/java" type="XMLMAPPER" />
+
+		<table tableName="normal_table"
+               enableDeleteByExample="false" enableDeleteByPrimaryKey="false">
+        </table>
+		<table tableName="read_only_table"
+               enableSelectByExample="true" enableCountByExample="true" 
+               enableSelectByPrimaryKey="true" enableInsert="false" 
+               enableUpdateByExample="false" enableUpdateByPrimaryKey="false"
+               enableDeleteByExample="false" enableDeleteByPrimaryKey="false">
+        </table>
+    </context>
+</generatorConfiguration>

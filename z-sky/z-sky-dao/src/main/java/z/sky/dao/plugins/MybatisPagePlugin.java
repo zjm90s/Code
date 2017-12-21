@@ -1,4 +1,4 @@
-package z.sky.mybatis;
+package z.sky.dao.plugins;
 
 import java.util.List;
 
