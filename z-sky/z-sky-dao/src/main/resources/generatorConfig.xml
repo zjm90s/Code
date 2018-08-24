@@ -3,7 +3,9 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
-    <context id="context" targetRuntime="MyBatis3">
+    <context id="context" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+		<property name="endingDelimiter" value="`"/>
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
@@ -21,11 +23,18 @@
 		<sqlMapGenerator targetPackage="mybatis.mapper"
 				targetProject="src/main/resources" />
 		<javaClientGenerator targetPackage="z.sky.dao.mapper"
-				targetProject="src/main/java" type="XMLMAPPER" />
-
-		<table tableName="normal_table"
-               enableDeleteByExample="false" enableDeleteByPrimaryKey="false">
-        </table>
+					targetProject="src/main/java" type="XMLMAPPER" />
+	
+		<table tableName="normal_table" enableDeleteByExample="false"
+			enableDeleteByPrimaryKey="false">
+			<generatedKey column="id" sqlStatement="MySql" identity="true" />
+			<columnOverride column="key" delimitedColumnName="true" />
+			<columnOverride column="status" javaType="java.lang.Integer" />
+			<columnOverride column="create_at" javaType="org.joda.time.DateTime"
+				typeHandler="z.sky.dao.handler.DateTimeTypeHandler" />
+			<columnOverride column="update_at" javaType="org.joda.time.DateTime"
+				typeHandler="z.sky.dao.handler.DateTimeTypeHandler" />
+		</table>
 		<table tableName="read_only_table"
                enableSelectByExample="true" enableCountByExample="true" 
                enableSelectByPrimaryKey="true" enableInsert="false" 
